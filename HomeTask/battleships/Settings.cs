@@ -5,19 +5,8 @@ using System.Linq;
 
 namespace battleships
 {
-	public class Settings
+	public class Settings : ISettings
 	{
-		public int CrashLimit;
-		public int GamesCount;
-		public int Height;
-		public bool Interactive;
-		public int MemoryLimit;
-		public int RandomSeed;
-		public int[] Ships;
-		public int TimeLimitSeconds;
-		public bool Verbose;
-		public int Width;
-
 		public Settings()
 		{
 		}

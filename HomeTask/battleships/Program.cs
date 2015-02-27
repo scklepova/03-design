@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Threading;
+using Ninject;
+
 
 namespace battleships
 {
@@ -16,9 +18,14 @@ namespace battleships
 				Console.WriteLine("Usage: {0} <ai.exe>", Process.GetCurrentProcess().ProcessName);
 				return;
 			}
+		    
 			var aiPath = args[0];
 			var settings = new Settings("settings.txt");
-			var tester = new AiTester(settings);
+            var mapGenerator = new MapGenerator(settings, new Random(settings.RandomSeed));
+            var gameVisualizer = new GameVisualizer();
+            var monitor = new ProcessMonitor(TimeSpan.FromSeconds(settings.TimeLimitSeconds * settings.GamesCount), settings.MemoryLimit);
+			var tester = new AiTester(settings, mapGenerator, gameVisualizer, monitor);
+
 			if (File.Exists(aiPath))
 				tester.TestSingleFile(aiPath);
 			else

@@ -6,8 +6,17 @@ using System.Threading.Tasks;
 
 namespace battleships
 {
-    public interface ISettings
+    public abstract class ISettings
     {
-        // ? field's usage. Make get and set methods?
+        public int CrashLimit;
+        public int GamesCount;
+        public int Height;
+        public bool Interactive;
+        public int MemoryLimit;
+        public int RandomSeed;
+        public int[] Ships;
+        public int TimeLimitSeconds;
+        public bool Verbose;
+        public int Width;
     }
 }
