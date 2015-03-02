@@ -6,10 +6,10 @@ namespace battleships
 {
 	public class MapGenerator : IMapGenerator
 	{
-		private readonly Settings settings;
+		private readonly SettingsBase settings;
 		private readonly Random random;
 
-		public MapGenerator(Settings settings, Random random)
+		public MapGenerator(SettingsBase settings, Random random)
 		{
 			this.settings = settings;
 			this.random = random;

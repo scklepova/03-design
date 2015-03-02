@@ -8,13 +8,13 @@ namespace battleships
 	public class AiTester
 	{
 		private static readonly Logger resultsLog = LogManager.GetLogger("results");
-		private readonly ISettings settings;
+		private readonly SettingsBase settings;
 	    private readonly IMapGenerator mapGenerator;
 	    private readonly IGameVisualizer gameVisualizer;
 	    private readonly ProcessMonitor monitor;
 
 
-		public AiTester(ISettings settings, IMapGenerator mapGenerator, IGameVisualizer gameVisualizer, ProcessMonitor monitor)
+		public AiTester(SettingsBase settings, IMapGenerator mapGenerator, IGameVisualizer gameVisualizer, ProcessMonitor monitor)
 		{
 			this.settings = settings;
 		    this.mapGenerator = mapGenerator;

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace battleships
 {
-	public class Settings : ISettings
+	public class Settings : SettingsBase
 	{
 		public Settings()
 		{

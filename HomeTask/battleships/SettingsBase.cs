@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace battleships
 {
-    public abstract class ISettings
+    public abstract class SettingsBase
     {
         public int CrashLimit;
         public int GamesCount;
