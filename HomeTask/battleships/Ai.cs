@@ -13,10 +13,10 @@ namespace battleships
 		private readonly string exePath;
 		private readonly ProcessMonitor monitor;
 
-		public Ai(string exePath, TimeSpan timeLimit, long memoryLimit)
+		public Ai(string exePath, ProcessMonitor monitor)
 		{
 			this.exePath = exePath;
-			this.monitor = new ProcessMonitor(timeLimit, memoryLimit);
+			this.monitor = monitor;
 		}
 
 		public string Name
