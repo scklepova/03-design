@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using NLog;
+using  System.Collections.Immutable;
 
 namespace battleships
 {
@@ -75,5 +77,20 @@ namespace battleships
 			var cellHaveWoundedDiagonalNeighbour = diagonals.Any(d => Map[target.Add(d)] == MapCell.DeadOrWoundedShip);
 			return cellWasHitAlready || cellIsNearDestroyedShip || cellHaveWoundedDiagonalNeighbour;
 		}
+
+        public void RunGameToEnd(GameVisualizer vis, bool interactive)
+        {
+            while (!IsOver())
+            {
+                MakeStep();
+                if (interactive)
+                {
+                    vis.Visualize(this);
+                    if (AiCrashed)
+                        Console.WriteLine(LastError.Message);
+                    Console.ReadKey();
+                }
+            }
+        }
 	}
 }
