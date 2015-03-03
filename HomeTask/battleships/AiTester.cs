@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using NLog;
 
@@ -15,16 +16,19 @@ namespace battleships
 			this.settings = settings;
 		}
 
+        
+
 		public void TestSingleFile(string exe)
 		{
 			var gen = new MapGenerator(settings, new Random(settings.RandomSeed));
 			var vis = new GameVisualizer();
 			var monitor = new ProcessMonitor(TimeSpan.FromSeconds(settings.TimeLimitSeconds * settings.GamesCount), settings.MemoryLimit);
+		    Ai.AiProcessStarted += monitor.Register;
 			var badShots = 0;
 			var crashes = 0;
 			var gamesPlayed = 0;
 			var shots = new List<int>();
-			var ai = new Ai(exe, monitor);
+			var ai = new Ai(exe);
 			for (var gameIndex = 0; gameIndex < settings.GamesCount; gameIndex++)
 			{
 				var map = gen.GenerateMap();
@@ -36,7 +40,7 @@ namespace battleships
 				{
 					crashes++;
 					if (crashes > settings.CrashLimit) break;
-					ai = new Ai(exe, monitor);
+					ai = new Ai(exe);
 				}
 				else
 					shots.Add(game.TurnsCount);

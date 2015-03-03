@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NLog;
+using NUnit.Framework.Internal.Execution;
 
 namespace battleships
 {
@@ -11,13 +12,13 @@ namespace battleships
 		private static readonly Logger log = LogManager.GetCurrentClassLogger();
 		private Process process;
 		private readonly string exePath;
-		private readonly ProcessMonitor monitor;
 
-		public Ai(string exePath, ProcessMonitor monitor)
+		public Ai(string exePath)
 		{
 			this.exePath = exePath;
-			this.monitor = monitor;
 		}
+
+        public static event Action<Process> AiProcessStarted;
 
 		public string Name
 		{
@@ -62,6 +63,7 @@ namespace battleships
 			process = null;
 		}
 
+
 		private Process RunProcess()
 		{
 			var startInfo = new ProcessStartInfo
@@ -75,7 +77,7 @@ namespace battleships
 				WindowStyle = ProcessWindowStyle.Hidden
 			};
 			var aiProcess = Process.Start(startInfo);
-			monitor.Register(aiProcess);
+		    AiProcessStarted(aiProcess);
 			return aiProcess;
 		}
 

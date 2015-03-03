@@ -19,7 +19,7 @@ namespace battleships
 		{
 			this.timeLimit = timeLimit;
 			this.memoryLimit = memoryLimit;
-			CreateMonitoringThread().Start();
+			CreateMonitoringThread().Start();        
 		}
 
 		private Thread CreateMonitoringThread()
