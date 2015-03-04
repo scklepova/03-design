@@ -8,7 +8,6 @@ namespace battleships
 {
     public class AiTester
     {
-        private static readonly Logger resultsLog = LogManager.GetLogger("results");
         private readonly Settings settings;
 
         public AiTester(Settings settings)
@@ -17,16 +16,19 @@ namespace battleships
         }
 
 
-
         public void TestSingleFile(string exe)
         {
             var monitor = new ProcessMonitor(TimeSpan.FromSeconds(settings.TimeLimitSeconds*settings.GamesCount),
                 settings.MemoryLimit);
             Ai.AiProcessStarted += monitor.Register;
 
+            var mapGenerator = new MapGenerator(settings, new Random(settings.RandomSeed));
+            var gameVisualizer = new GameVisualizer();
+            Logger resultsLog = LogManager.GetLogger("results");
+
             var aiMaker = new AiMaker(exe);
             var master = new GameMaster(aiMaker, settings);
-            var results = master.RunGamesSequence();
+            var results = master.RunGamesSequence(mapGenerator, gameVisualizer);
             var statisticsMaster = new StatisticsMaster(results, resultsLog, settings);
             statisticsMaster.WriteTotal();
 

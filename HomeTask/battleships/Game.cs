@@ -78,19 +78,21 @@ namespace battleships
 			return cellWasHitAlready || cellIsNearDestroyedShip || cellHaveWoundedDiagonalNeighbour;
 		}
 
-        public void RunGameToEnd(GameVisualizer vis, bool interactive)
+        public SingleGameResult RunGameToEnd(GameVisualizer visualizer, bool interactive)
         {
             while (!IsOver())
             {
                 MakeStep();
                 if (interactive)
                 {
-                    vis.Visualize(this);
+                    visualizer.Visualize(this);
                     if (AiCrashed)
                         Console.WriteLine(LastError.Message);
                     Console.ReadKey();
                 }
             }
+
+            return new SingleGameResult(TurnsCount, AiCrashed, BadShots);
         }
 	}
 }

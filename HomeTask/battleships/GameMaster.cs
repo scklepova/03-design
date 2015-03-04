@@ -10,9 +10,6 @@ namespace battleships
 {
     public class GameMaster
     {
-        private int badShots;
-        private int crashes;
-        private readonly List<int> shots = new List<int>();
         private readonly Settings settings;
         private readonly AiMaker aiMaker;
 
@@ -20,30 +17,24 @@ namespace battleships
         {
             this.aiMaker = maker;
             this.settings = settings;
-            badShots = 0;
-            crashes = 0;
         }
 
-        public GameResult RunGamesSequence()
+        public TotalGamesResults RunGamesSequence(MapGenerator generator, GameVisualizer visualizer)
         {
-            var gen = new MapGenerator(settings, new Random(settings.RandomSeed));
-            var vis = new GameVisualizer();
-
+            var crashes = 0;
+            var results = new List<SingleGameResult>();
             var ai = aiMaker.MakeAi();
             for (var gameIndex = 0; gameIndex < settings.GamesCount; gameIndex++)
             {
-                var map = gen.GenerateMap();
+                var map = generator.GenerateMap();
                 var game = new Game(map, ai);
-                game.RunGameToEnd(vis, settings.Interactive);
-                badShots += game.BadShots;
+                results.Add(game.RunGameToEnd(visualizer, settings.Interactive));
                 if (game.AiCrashed)
                 {
                     crashes++;
                     if (crashes > settings.CrashLimit) break;
                     ai = aiMaker.MakeAi();
                 }
-                else
-                    shots.Add(game.TurnsCount);
 
                 if (settings.Verbose)
                 {
@@ -51,7 +42,7 @@ namespace battleships
                 }
             }
             ai.Dispose();
-            return new GameResult(ai.Name, shots, crashes, badShots, settings.GamesCount);
+            return new TotalGamesResults(ai.Name, results);
         }
 
 
