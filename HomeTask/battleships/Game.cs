@@ -50,6 +50,8 @@ namespace battleships
 				TurnsCount++;
 		}
 
+        public static event Action AiCrashedEvent;
+
 		private bool UpdateLastTarget()
 		{
 			try
@@ -62,6 +64,7 @@ namespace battleships
 			catch (Exception e)
 			{
 				AiCrashed = true;
+			    AiCrashedEvent();
 				log.Info("Ai {0} crashed", ai.Name);
 				log.Error(e);
 				LastError = e;
@@ -78,7 +81,7 @@ namespace battleships
 			return cellWasHitAlready || cellIsNearDestroyedShip || cellHaveWoundedDiagonalNeighbour;
 		}
 
-        public SingleGameResult RunGameToEnd(GameVisualizer visualizer, bool interactive, bool verbose, int gameNumber)
+        public SingleGameResult RunGameToEnd(GameVisualizer visualizer, bool interactive, int gameNumber)
         {
             while (!IsOver())
             {
@@ -90,18 +93,11 @@ namespace battleships
                         Console.WriteLine(LastError.Message);
                     Console.ReadKey();
                 }
-            }
-            if (verbose)
-                WriteSingleGameResults(gameNumber);
-
-            return new SingleGameResult(TurnsCount, AiCrashed, BadShots);
+            }          
+            ai.Dispose();
+            return new SingleGameResult(TurnsCount, AiCrashed, BadShots, ai.Name, gameNumber);
         }
 
-        private void WriteSingleGameResults(int gameNumber)
-        {
-            Console.WriteLine(
-                "Game #{3,4}: Turns {0,4}, BadShots {1}{2}",
-                TurnsCount, BadShots, AiCrashed ? ", Crashed" : "", gameNumber);
-        }
+        
 	}
 }

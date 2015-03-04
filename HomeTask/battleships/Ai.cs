@@ -20,6 +20,7 @@ namespace battleships
 
         public static event Action<Process> AiProcessStarted;
 
+
 		public string Name
 		{
 			get { return Path.GetFileNameWithoutExtension(exePath); }

@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NUnit.Framework;
 
 namespace battleships
 {
@@ -19,25 +20,19 @@ namespace battleships
             this.settings = settings;
         }
 
-        public TotalGamesResults RunGamesSequence(MapGenerator generator, GameVisualizer visualizer)
+        public List<SingleGameResult> RunGamesSequence(MapGenerator generator, GameVisualizer visualizer)
         {
-            var crashes = 0;
-            var results = new List<SingleGameResult>();
-            var ai = aiMaker.MakeAi();
-            for (var gameIndex = 0; gameIndex < settings.GamesCount; gameIndex++)
-            {
-                var map = generator.GenerateMap();
-                var game = new Game(map, ai);
-                results.Add(game.RunGameToEnd(visualizer, settings.Interactive, settings.Verbose, results.Count));
-                if (game.AiCrashed)
-                {
-                    crashes++;
-                    if (crashes > settings.CrashLimit) break;
-                    ai = aiMaker.MakeAi();
-                }
-            }
-            ai.Dispose();
-            return new TotalGamesResults(ai.Name, results);
+            
+            var i = 0;
+            var results = Enumerable.Range(0, settings.GamesCount)
+                .Select(x => aiMaker.MakeAi())
+                .TakeWhile(ai => aiMaker.CrashesAllowable(settings.CrashLimit))
+                .Select(ai => new Game(generator.GenerateMap(), ai))
+                .Select(game => game.RunGameToEnd(visualizer, settings.Interactive, ++i))
+                .Select(result => result.WriteSingleGameResults())
+                .ToList();
+
+            return results;
         }
 
 

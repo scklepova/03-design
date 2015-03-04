@@ -9,13 +9,13 @@ namespace battleships
 {
     public class StatisticsMaster
     {
-        private readonly TotalGamesResults total;
+        private readonly List<SingleGameResult> results ;
         private readonly Logger resultsLog;
         private readonly Settings settings;
 
-        public StatisticsMaster(TotalGamesResults total, Logger logger, Settings settings)
+        public StatisticsMaster(List<SingleGameResult> results , Logger logger, Settings settings)
         {
-            this.total = total;
+            this.results = results;
             this.resultsLog = logger;
             this.settings = settings;
         }
@@ -36,7 +36,7 @@ namespace battleships
 			var efficiencyScore = 100.0 * (settings.Width * settings.Height - mean) / (settings.Width * settings.Height);
 			var score = efficiencyScore - crashPenalty - badFraction;
 			var headers = FormatTableRow(new object[] { "AiName", "Mean", "Sigma", "Median", "Crashes", "Bad%", "Games", "Score" });
-			var message = FormatTableRow(new object[] { total.AiName, mean, sigma, median, crashes, badFraction, total.Results.Count, score });
+			var message = FormatTableRow(new object[] { results.ElementAt(0).AiName, mean, sigma, median, crashes, badFraction, results.Count, score });
 			resultsLog.Info(message);
 
 			Console.WriteLine();
@@ -48,17 +48,17 @@ namespace battleships
 
         public List<int> GetListOfShots()
         {
-            return total.Results.Select(result => result.Shots).ToList();
+            return results.Select(result => result.Shots).ToList();
         }
 
         public int GetTotalBadShots()
         {
-            return total.Results.Sum(result => result.BadShots);
+            return results.Sum(result => result.BadShots);
         }
 
         public int GetTotalCrashes()
         {
-            return total.Results.Count(result => result.Crashed);
+            return results.Count(result => result.Crashed);
         }
 
 		private string FormatTableRow(object[] values)
