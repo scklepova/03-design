@@ -28,7 +28,7 @@ namespace battleships
             {
                 var map = generator.GenerateMap();
                 var game = new Game(map, ai);
-                results.Add(game.RunGameToEnd(visualizer, settings.Interactive));
+                results.Add(game.RunGameToEnd(visualizer, settings.Interactive, settings.Verbose, results.Count));
                 if (game.AiCrashed)
                 {
                     crashes++;

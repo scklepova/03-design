@@ -78,7 +78,7 @@ namespace battleships
 			return cellWasHitAlready || cellIsNearDestroyedShip || cellHaveWoundedDiagonalNeighbour;
 		}
 
-        public SingleGameResult RunGameToEnd(GameVisualizer visualizer, bool interactive)
+        public SingleGameResult RunGameToEnd(GameVisualizer visualizer, bool interactive, bool verbose, int gameNumber)
         {
             while (!IsOver())
             {
@@ -91,8 +91,17 @@ namespace battleships
                     Console.ReadKey();
                 }
             }
+            if (verbose)
+                WriteSingleGameResults(gameNumber);
 
             return new SingleGameResult(TurnsCount, AiCrashed, BadShots);
+        }
+
+        private void WriteSingleGameResults(int gameNumber)
+        {
+            Console.WriteLine(
+                "Game #{3,4}: Turns {0,4}, BadShots {1}{2}",
+                TurnsCount, BadShots, AiCrashed ? ", Crashed" : "", gameNumber);
         }
 	}
 }

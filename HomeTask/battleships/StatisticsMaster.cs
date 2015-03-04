@@ -9,30 +9,15 @@ namespace battleships
 {
     public class StatisticsMaster
     {
-        private readonly TotalGamesResults results;
+        private readonly TotalGamesResults total;
         private readonly Logger resultsLog;
         private readonly Settings settings;
 
-        public StatisticsMaster(TotalGamesResults results, Logger logger, Settings settings)
+        public StatisticsMaster(TotalGamesResults total, Logger logger, Settings settings)
         {
-            this.results = results;
+            this.total = total;
             this.resultsLog = logger;
             this.settings = settings;
-        }
-
-        public void WriteAllGamesResults()
-        {
-            for (var i = 0; i < results.Results.Count; i++)
-            {
-                WriteSingleGameResults(results.Results.ElementAt(i), i);
-            }
-        }
-
-        private static void WriteSingleGameResults(SingleGameResult result, int gameNumber)
-        {
-            Console.WriteLine(
-                "Game #{3,4}: Turns {0,4}, BadShots {1}{2}",
-                result.Shots, result.BadShots, result.Crashed ? ", Crashed" : "", gameNumber);
         }
 
         public void WriteScoreStatistics()
@@ -51,7 +36,7 @@ namespace battleships
 			var efficiencyScore = 100.0 * (settings.Width * settings.Height - mean) / (settings.Width * settings.Height);
 			var score = efficiencyScore - crashPenalty - badFraction;
 			var headers = FormatTableRow(new object[] { "AiName", "Mean", "Sigma", "Median", "Crashes", "Bad%", "Games", "Score" });
-			var message = FormatTableRow(new object[] { results.AiName, mean, sigma, median, crashes, badFraction, results.Results.Count, score });
+			var message = FormatTableRow(new object[] { total.AiName, mean, sigma, median, crashes, badFraction, total.Results.Count, score });
 			resultsLog.Info(message);
 
 			Console.WriteLine();
@@ -63,17 +48,17 @@ namespace battleships
 
         public List<int> GetListOfShots()
         {
-            return results.Results.Select(result => result.Shots).ToList();
+            return total.Results.Select(result => result.Shots).ToList();
         }
 
         public int GetTotalBadShots()
         {
-            return results.Results.Sum(result => result.BadShots);
+            return total.Results.Sum(result => result.BadShots);
         }
 
         public int GetTotalCrashes()
         {
-            return results.Results.Count(result => result.Crashed);
+            return total.Results.Count(result => result.Crashed);
         }
 
 		private string FormatTableRow(object[] values)

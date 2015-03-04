@@ -30,8 +30,7 @@ namespace battleships
             var master = new GameMaster(aiMaker, settings);
             var results = master.RunGamesSequence(mapGenerator, gameVisualizer);
             var statisticsMaster = new StatisticsMaster(results, resultsLog, settings);
-            if (settings.Verbose) 
-                statisticsMaster.WriteAllGamesResults();
+            
             statisticsMaster.WriteScoreStatistics();
 
         }
