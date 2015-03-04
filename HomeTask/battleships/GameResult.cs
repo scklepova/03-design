@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace battleships
 {
-    public class SingleGameResult
+    public class GameResult
     {
         
         public readonly int Shots;
@@ -16,7 +16,7 @@ namespace battleships
         public readonly int GameNumber;
         
 
-        public SingleGameResult(int shots, bool crashed, int badShots, string aiName, int gameNumber)
+        public GameResult(int shots, bool crashed, int badShots, string aiName, int gameNumber)
         {
             this.Shots = shots;
             this.Crashed = crashed;
@@ -25,7 +25,7 @@ namespace battleships
             this.GameNumber = gameNumber;
         }
 
-        public SingleGameResult WriteSingleGameResults()
+        public GameResult WriteSingleGameResults()
         {
             Console.WriteLine(
                 "Game #{3,4}: Turns {0,4}, BadShots {1}{2}",

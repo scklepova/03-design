@@ -81,7 +81,7 @@ namespace battleships
 			return cellWasHitAlready || cellIsNearDestroyedShip || cellHaveWoundedDiagonalNeighbour;
 		}
 
-        public SingleGameResult RunGameToEnd(GameVisualizer visualizer, bool interactive, int gameNumber)
+        public GameResult RunGameToEnd(GameVisualizer visualizer, bool interactive, int gameNumber)
         {
             while (!IsOver())
             {
@@ -95,7 +95,7 @@ namespace battleships
                 }
             }          
             ai.Dispose();
-            return new SingleGameResult(TurnsCount, AiCrashed, BadShots, ai.Name, gameNumber);
+            return new GameResult(TurnsCount, AiCrashed, BadShots, ai.Name, gameNumber);
         }
 
         

@@ -9,11 +9,11 @@ namespace battleships
 {
     public class StatisticsMaster
     {
-        private readonly List<SingleGameResult> results ;
+        private readonly List<GameResult> results ;
         private readonly Logger resultsLog;
         private readonly Settings settings;
 
-        public StatisticsMaster(List<SingleGameResult> results , Logger logger, Settings settings)
+        public StatisticsMaster(List<GameResult> results , Logger logger, Settings settings)
         {
             this.results = results;
             this.resultsLog = logger;

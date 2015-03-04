@@ -54,8 +54,7 @@
     <Compile Include="Ai.cs" />
     <Compile Include="AiMaker.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="GameMaster.cs" />
-    <Compile Include="SingleGameResult.cs" />
+    <Compile Include="GameResult.cs" />
     <Compile Include="GameVisualizer.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="MapGenerator.cs" />

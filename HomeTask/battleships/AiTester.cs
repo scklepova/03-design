@@ -16,23 +16,28 @@ namespace battleships
         }
 
 
-        public void TestSingleFile(string exe)
+        public void TestSingleFile(string aiPath, MapGenerator mapGenerator, GameVisualizer gameVisualizer, AiMaker aiMaker, 
+            Logger resultsLogger)
         {
-            var monitor = new ProcessMonitor(TimeSpan.FromSeconds(settings.TimeLimitSeconds*settings.GamesCount),
-                settings.MemoryLimit);
-            Ai.AiProcessStarted += monitor.Register;
+            var results = RunGamesSequence(mapGenerator, gameVisualizer, aiMaker);
 
-            var mapGenerator = new MapGenerator(settings, new Random(settings.RandomSeed));
-            var gameVisualizer = new GameVisualizer();
-            Logger resultsLog = LogManager.GetLogger("results");
-
-            var aiMaker = new AiMaker(exe);
-            var master = new GameMaster(aiMaker, settings);
-            var results = master.RunGamesSequence(mapGenerator, gameVisualizer);
-            var statisticsMaster = new StatisticsMaster(results, resultsLog, settings);
-            
+            var statisticsMaster = new StatisticsMaster(results, resultsLogger, settings);            
             statisticsMaster.WriteScoreStatistics();
 
+        }
+
+        public List<GameResult> RunGamesSequence(MapGenerator generator, GameVisualizer visualizer, AiMaker aiMaker)
+        {
+            var i = 0;
+            var results = Enumerable.Range(0, settings.GamesCount)
+                .Select(x => aiMaker.MakeAi())
+                .TakeWhile(ai => aiMaker.CrashesAllowable(settings.CrashLimit))
+                .Select(ai => new Game(generator.GenerateMap(), ai))
+                .Select(game => game.RunGameToEnd(visualizer, settings.Interactive, ++i))
+                .Select(result => result.WriteSingleGameResults())
+                .ToList();
+
+            return results;
         }
 
     }
