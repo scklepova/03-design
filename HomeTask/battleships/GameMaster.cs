@@ -35,24 +35,13 @@ namespace battleships
                     if (crashes > settings.CrashLimit) break;
                     ai = aiMaker.MakeAi();
                 }
-
-                if (settings.Verbose)
-                {
-                    WriteGameResults(game, gameIndex);
-                }
             }
             ai.Dispose();
             return new TotalGamesResults(ai.Name, results);
         }
 
 
-        private static void WriteGameResults(Game game, int gameNumber)
-        {
-            Console.WriteLine(
-                "Game #{3,4}: Turns {0,4}, BadShots {1}{2}",
-                game.TurnsCount, game.BadShots, game.AiCrashed ? ", Crashed" : "", gameNumber);
-        }
-
+       
 
     }
 }

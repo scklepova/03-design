@@ -20,7 +20,22 @@ namespace battleships
             this.settings = settings;
         }
 
-        public void WriteTotal()
+        public void WriteAllGamesResults()
+        {
+            for (var i = 0; i < results.Results.Count; i++)
+            {
+                WriteSingleGameResults(results.Results.ElementAt(i), i);
+            }
+        }
+
+        private static void WriteSingleGameResults(SingleGameResult result, int gameNumber)
+        {
+            Console.WriteLine(
+                "Game #{3,4}: Turns {0,4}, BadShots {1}{2}",
+                result.Shots, result.BadShots, result.Crashed ? ", Crashed" : "", gameNumber);
+        }
+
+        public void WriteScoreStatistics()
         {
             var shots = GetListOfShots();
             var badShots = GetTotalBadShots();
@@ -48,17 +63,17 @@ namespace battleships
 
         public List<int> GetListOfShots()
         {
-            return results.Results.Select(result => result.shots).ToList();
+            return results.Results.Select(result => result.Shots).ToList();
         }
 
         public int GetTotalBadShots()
         {
-            return results.Results.Sum(result => result.badShots);
+            return results.Results.Sum(result => result.BadShots);
         }
 
         public int GetTotalCrashes()
         {
-            return results.Results.Count(result => result.crashed);
+            return results.Results.Count(result => result.Crashed);
         }
 
 		private string FormatTableRow(object[] values)

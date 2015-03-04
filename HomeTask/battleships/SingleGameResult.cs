@@ -8,15 +8,16 @@ namespace battleships
 {
     public class SingleGameResult
     {
-        public readonly int shots;
-        public readonly bool crashed;
-        public readonly int badShots;
+        
+        public readonly int Shots;
+        public readonly bool Crashed;
+        public readonly int BadShots;
 
         public SingleGameResult(int shots, bool crashed, int badShots)
         {
-            this.shots = shots;
-            this.crashed = crashed;
-            this.badShots = badShots;
+            this.Shots = shots;
+            this.Crashed = crashed;
+            this.BadShots = badShots;
            
         }
     }
